@@ -1,0 +1,5 @@
+{
+  "name": "RFLP Lab Explorer",
+  "description": "A top-down 2D adventure game where you play as a scientist in a molecular biology lab, performing RFLP analysis by interacting with different equipment stations to solve a case.",
+  "requestFramePermissions": []
+}
