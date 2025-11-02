@@ -89,6 +89,134 @@ const InfoBoard = ({name}: {name: string}) => (
     </div>
 );
 
+// Advantages Button - Modern gradient card with icon
+const AdvantagesButton = () => (
+    <div className="w-full h-full bg-gradient-to-br from-emerald-500 via-green-500 to-teal-600 border-4 border-green-300 rounded-2xl p-3 shadow-2xl hover:shadow-green-500/50 transform hover:scale-105 transition-all duration-300 relative overflow-hidden group">
+        {/* Animated background glow */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+        
+        {/* Icon */}
+        <div className="absolute top-2 right-2 w-8 h-8 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path>
+            </svg>
+        </div>
+        
+        {/* Content */}
+        <div className="relative z-10 flex flex-col items-center justify-center h-full">
+            <div className="text-4xl mb-2 animate-bounce-slow">✓</div>
+            <p className="text-center font-bold text-sm text-white drop-shadow-lg">Advantages</p>
+            <p className="text-center text-xs text-green-100 mt-1">Key Benefits</p>
+        </div>
+        
+        {/* Corner decoration */}
+        <div className="absolute bottom-0 left-0 w-8 h-8 border-l-4 border-b-4 border-white/30 rounded-bl-2xl"></div>
+    </div>
+);
+
+// Limitations Button - Modern gradient card with warning icon
+const LimitationsButton = () => (
+    <div className="w-full h-full bg-gradient-to-br from-orange-500 via-amber-500 to-yellow-500 border-4 border-orange-300 rounded-2xl p-3 shadow-2xl hover:shadow-orange-500/50 transform hover:scale-105 transition-all duration-300 relative overflow-hidden group">
+        {/* Animated background glow */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+        
+        {/* Icon */}
+        <div className="absolute top-2 right-2 w-8 h-8 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm animate-pulse">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+        </div>
+        
+        {/* Content */}
+        <div className="relative z-10 flex flex-col items-center justify-center h-full">
+            <div className="text-4xl mb-2">⚠️</div>
+            <p className="text-center font-bold text-sm text-white drop-shadow-lg">Limitations</p>
+            <p className="text-center text-xs text-orange-100 mt-1">Constraints</p>
+        </div>
+        
+        {/* Corner decoration */}
+        <div className="absolute bottom-0 left-0 w-8 h-8 border-l-4 border-b-4 border-white/30 rounded-bl-2xl"></div>
+    </div>
+);
+
+// RFLP vs PCR Button - Modern comparison card
+const ComparisonButton = () => (
+    <div className="w-full h-full bg-gradient-to-br from-cyan-500 via-blue-500 to-indigo-600 border-4 border-cyan-300 rounded-2xl p-3 shadow-2xl hover:shadow-cyan-500/50 transform hover:scale-105 transition-all duration-300 relative overflow-hidden group">
+        {/* Animated background glow */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+        
+        {/* Icon */}
+        <div className="absolute top-2 right-2 w-8 h-8 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+        </div>
+        
+        {/* Content */}
+        <div className="relative z-10 flex flex-col items-center justify-center h-full">
+            <div className="text-3xl mb-2 font-bold text-white">VS</div>
+            <p className="text-center font-bold text-sm text-white drop-shadow-lg">RFLP vs PCR</p>
+            <p className="text-center text-xs text-cyan-100 mt-1">Comparison</p>
+        </div>
+        
+        {/* Corner decoration */}
+        <div className="absolute bottom-0 left-0 w-8 h-8 border-l-4 border-b-4 border-white/30 rounded-bl-2xl"></div>
+    </div>
+);
+
+// References Button - Modern academic card
+const ReferencesButton = () => (
+    <div className="w-full h-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-600 border-4 border-indigo-300 rounded-2xl p-3 shadow-2xl hover:shadow-indigo-500/50 transform hover:scale-105 transition-all duration-300 relative overflow-hidden group">
+        {/* Animated background glow */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+        
+        {/* Icon */}
+        <div className="absolute top-2 right-2 w-8 h-8 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            </svg>
+        </div>
+        
+        {/* Content */}
+        <div className="relative z-10 flex flex-col items-center justify-center h-full">
+            <div className="text-4xl mb-2">📚</div>
+            <p className="text-center font-bold text-sm text-white drop-shadow-lg">References</p>
+            <p className="text-center text-xs text-indigo-100 mt-1">Citations</p>
+        </div>
+        
+        {/* Corner decoration */}
+        <div className="absolute bottom-0 left-0 w-8 h-8 border-l-4 border-b-4 border-white/30 rounded-bl-2xl"></div>
+    </div>
+);
+
+// Complete Training Button - Celebratory completion card
+const CompletionButton = () => (
+    <div className="w-full h-full bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 border-4 border-yellow-300 rounded-2xl p-2 shadow-2xl hover:shadow-yellow-500/50 transform hover:scale-110 transition-all duration-300 relative overflow-hidden group animate-pulse">
+        {/* Animated background glow */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500"></div>
+        
+        {/* Sparkle effects */}
+        <div className="absolute top-1 left-1 w-2 h-2 bg-white rounded-full animate-ping"></div>
+        <div className="absolute top-1 right-1 w-2 h-2 bg-white rounded-full animate-ping" style={{animationDelay: '0.5s'}}></div>
+        
+        {/* Icon */}
+        <div className="absolute top-1 right-1 w-6 h-6 bg-white/30 rounded-full flex items-center justify-center backdrop-blur-sm">
+            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+        </div>
+        
+        {/* Content */}
+        <div className="relative z-10 flex flex-col items-center justify-center h-full">
+            <div className="text-3xl mb-1 animate-bounce-slow">🏆</div>
+            <p className="text-center font-bold text-xs text-white drop-shadow-lg">Complete Training</p>
+        </div>
+        
+        {/* Bottom glow */}
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white to-transparent"></div>
+    </div>
+);
+
 // --- New Decor Components ---
 const Desk = () => <div className="w-full h-full bg-[#a1662f] border-2 border-t-4 border-[#603813] rounded-sm shadow-md"></div>;
 const Plant = () => (
@@ -165,6 +293,16 @@ const DisplayComponent: React.FC<{display: Display}> = ({display}) => {
         case 'app-diseases':
         case 'app-mapping':
             content = <ApplicationDisplay name={display.name} />; break;
+        case 'adv-board':
+            content = <AdvantagesButton />; break;
+        case 'lim-board':
+            content = <LimitationsButton />; break;
+        case 'pcr-compare':
+            content = <ComparisonButton />; break;
+        case 'references':
+            content = <ReferencesButton />; break;
+        case 'completion':
+            content = <CompletionButton />; break;
         default:
              content = <InfoBoard name={display.name} />;
     }

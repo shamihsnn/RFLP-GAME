@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { InteractiveObject, Step } from '../types';
 import { X } from 'lucide-react';
 
@@ -10,6 +10,14 @@ interface InteractionModalProps {
 }
 
 const InteractionModal: React.FC<InteractionModalProps> = ({ interactiveObject, step, onClose, onComplete }) => {
+    const [isMinigameComplete, setIsMinigameComplete] = useState(false);
+
+    const handleMinigameComplete = () => {
+        setIsMinigameComplete(true);
+        // We call onComplete here to update the main game state (e.g., inventory)
+        // but the modal will stay open to show the animation.
+        onComplete();
+    };
     const MiniGameComponent = step.miniGame;
 
     // Add ESC key handler
@@ -56,7 +64,7 @@ const InteractionModal: React.FC<InteractionModalProps> = ({ interactiveObject, 
                     <div className="bg-gray-900 p-4 rounded-md border border-gray-700">
                          {MiniGameComponent ? (
                             // Pass both the onComplete callback and any additional props from step.miniGameProps
-                            <MiniGameComponent onComplete={onComplete} onClose={onClose} {...(step.miniGameProps || {})} />
+                            <MiniGameComponent onComplete={handleMinigameComplete} onClose={onClose} {...(step.miniGameProps || {})} />
                          ) : (
                             // Fallback for displays with no minigame
                             <div className="flex flex-col items-center justify-center h-full min-h-[150px]">

@@ -87,6 +87,116 @@
   @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
   @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes expand { to { transform: scaleX(1); } }
+
+  /* DNA Extraction Animations */
+  @keyframes dna-extract {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  .animate-dna-extract {
+    animation: dna-extract 2s ease-in-out infinite;
+  }
+  @keyframes slide-up {
+    0% { transform: translateY(100%); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(-100%); opacity: 0; }
+  }
+  .animate-slide-up {
+    animation: slide-up 3s ease-in-out infinite;
+  }
+
+  /* DNA Digestion Animations */
+  @keyframes scissors-cut {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(45deg) scale(1.2); }
+    100% { transform: rotate(0deg) scale(1); }
+  }
+  .animate-scissors-cut {
+    animation: scissors-cut 1s ease-in-out;
+  }
+  @keyframes flash {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+  }
+  .animate-flash {
+    animation: flash 0.5s ease-in-out;
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .animate-fade-in {
+    animation: fade-in 1s ease-in;
+  }
+
+  /* Gel Electrophoresis Animations */
+  @keyframes migrate-down {
+    from { transform: translate(-50%, -100px); opacity: 0; }
+    to { transform: translate(-50%, 0); opacity: 1; }
+  }
+  .animate-migrate-down {
+    animation: migrate-down 2s ease-out forwards;
+  }
+
+  /* Southern Blotting Animations */
+  @keyframes transfer-up {
+    0% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-20px); }
+  }
+  .animate-transfer-up {
+    animation: transfer-up 1.5s ease-in forwards;
+  }
+  @keyframes appear {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .animate-appear {
+    animation: appear 1s ease-in;
+  }
+
+  /* Probe Hybridization Animations */
+  @keyframes probe-bind {
+    0% { transform: translate(-100px, -50px); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translate(0, 0); opacity: 1; }
+  }
+  .animate-probe-bind {
+    animation: probe-bind 1.5s ease-out forwards;
+  }
+
+  /* Autoradiogram Animations */
+  @keyframes film-develop {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(100%); }
+  }
+  .animate-film-develop {
+    animation: film-develop 3s ease-in-out infinite;
+  }
+  @keyframes band-appear {
+    from { background-color: rgba(255, 255, 255, 0); }
+    to { background-color: rgba(255, 255, 255, 0.9); }
+  }
+  .animate-band-appear {
+    animation: band-appear 1s ease-in;
+  }
+
+  /* Completion Display Animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    25% { transform: translateY(-20px) translateX(10px); }
+    50% { transform: translateY(-10px) translateX(-10px); }
+    75% { transform: translateY(-30px) translateX(5px); }
+  }
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes bounce-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+  .animate-bounce-slow {
+    animation: bounce-slow 2s ease-in-out infinite;
+  }
 </style>
 <link rel="stylesheet" href="/index.css">
 </head>
