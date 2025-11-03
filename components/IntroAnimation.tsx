@@ -35,11 +35,34 @@ const IntroAnimation: React.FC<IntroAnimationProps> = ({ onComplete, character }
         sabotageRef.current = new Audio('/assets/among-us-alarme-sabotage-393155.mp3');
         themeRef.current = new Audio('/assets/cricket-ambience-night.mp3');
 
+        // Add error handlers for debugging
+        const audioElements = [
+            { ref: ambientRef, name: 'ambient' },
+            { ref: murderRef, name: 'murder' },
+            { ref: screamRef, name: 'scream' },
+            { ref: stingRef, name: 'sting' },
+            { ref: sabotageRef, name: 'sabotage' },
+            { ref: themeRef, name: 'theme' }
+        ];
+
+        audioElements.forEach(({ ref, name }) => {
+            if (ref.current) {
+                ref.current.addEventListener('error', (e) => {
+                    console.error(`Failed to load ${name} audio:`, e);
+                });
+                ref.current.addEventListener('canplaythrough', () => {
+                    console.log(`${name} audio loaded successfully`);
+                });
+            }
+        });
+
         // Try to play ambient (may be blocked until user gesture) — non-blocking
         if (ambientRef.current) {
             ambientRef.current.volume = 0.25;
             ambientRef.current.loop = true;
-            ambientRef.current.play().catch(() => {});
+            ambientRef.current.play().catch((error) => {
+                console.log('Ambient audio autoplay prevented:', error.message);
+            });
         }
 
         return () => {
