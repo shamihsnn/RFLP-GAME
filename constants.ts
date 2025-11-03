@@ -124,10 +124,10 @@ export const ROOM_DATA: Record<RoomId, RoomData> = {
     walls: [...BASE_WALLS],
     displays: [
          { id: 'adv-board', type: 'display', name: 'Advantages', position: { x: 50, y: 100 }, size: { w: 150, h: 100 }, step: { stationId: 'adv-board', objective: 'Learn Advantages', description: '', miniGame: AdvantagesDisplay, requiredItems: [], resultingItems: [] } },
-         { id: 'lim-board', type: 'display', name: 'Limitations', position: { x: 600, y: 100 }, size: { w: 150, h: 100 }, step: { stationId: 'lim-board', objective: 'Learn Limitations', description: '', miniGame: LimitationsDisplay, requiredItems: [], resultingItems: [] } },
-         { id: 'pcr-compare', type: 'display', name: 'RFLP vs PCR', position: { x: 325, y: 50 }, size: { w: 150, h: 100 }, step: { stationId: 'pcr-compare', objective: 'Compare with PCR', description: '', miniGame: ComparisonTable, requiredItems: [], resultingItems: [] } },
-         { id: 'references', type: 'display', name: 'References', position: { x: 50, y: 400 }, size: { w: 150, h: 100 }, step: { stationId: 'references', objective: 'View References', description: '', miniGame: ReferencesDisplay, requiredItems: [], resultingItems: [] } },
-         { id: 'completion', type: 'display', name: 'Complete Training', position: { x: 325, y: 450 }, size: { w: 150, h: 50 }, step: { stationId: 'completion', objective: 'Complete Training', description: '', miniGame: CompletionDisplay, requiredItems: [], resultingItems: [] } },
+         { id: 'lim-board', type: 'display', name: 'Limitations', position: { x: 600, y: 140 }, size: { w: 150, h: 100 }, step: { stationId: 'lim-board', objective: 'Learn Limitations', description: '', miniGame: LimitationsDisplay, requiredItems: [], resultingItems: [] } },
+         { id: 'pcr-compare', type: 'display', name: 'RFLP vs PCR', position: { x: 280, y: 50 }, size: { w: 150, h: 100 }, step: { stationId: 'pcr-compare', objective: 'Compare with PCR', description: '', miniGame: ComparisonTable, requiredItems: [], resultingItems: [] } },
+         { id: 'references', type: 'display', name: 'References', position: { x: 50, y: 360 }, size: { w: 150, h: 100 }, step: { stationId: 'references', objective: 'View References', description: '', miniGame: ReferencesDisplay, requiredItems: [], resultingItems: [] } },
+         { id: 'completion', type: 'display', name: 'Complete Training', position: { x: 300, y: 430 }, size: { w: 200, h: 80 }, step: { stationId: 'completion', objective: 'Complete Training', description: '', miniGame: CompletionDisplay, requiredItems: [], resultingItems: [] } },
     ],
     doors: [
         { id: 'limitations-apps', type: 'door', name: 'To Applications', position: { x: 380, y: 575 }, size: { w: 60, h: 15 }, to: 'APPLICATIONS', targetDoorId: 'apps-limitations' }

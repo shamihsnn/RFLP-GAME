@@ -197,6 +197,34 @@
   .animate-bounce-slow {
     animation: bounce-slow 2s ease-in-out infinite;
   }
+
+  /* Kick Animation */
+  @keyframes kick-leg {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(10deg) scale(1.1); }
+    100% { transform: rotate(0deg) scale(1); }
+  }
+  .animate-kick-leg {
+    animation: kick-leg 0.4s ease-out forwards;
+  }
+
+  /* Modal Slide Up Animation (for kick interaction) */
+  @keyframes modal-slide-up {
+    0% {
+      opacity: 0;
+      transform: translateY(100px) scale(0.9);
+    }
+    60% {
+      transform: translateY(-10px) scale(1.02);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+  .animate-modal-slide-up {
+    animation: modal-slide-up 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
 </style>
 <link rel="stylesheet" href="/index.css">
 </head>

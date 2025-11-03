@@ -30,6 +30,8 @@ export type Character = {
 export type Player = {
     position: Position;
     character: Character;
+    isKicking?: boolean;
+    kickDirection?: 'up' | 'down' | 'left' | 'right';
 };
 
 export type Npc = {

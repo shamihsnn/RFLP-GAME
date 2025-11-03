@@ -13,6 +13,8 @@ const App: React.FC = () => {
     const [player, setPlayer] = useState<Player>({
         position: { x: 400, y: 540 },
         character: PREDEFINED_CHARACTERS[0],
+        isKicking: false,
+        kickDirection: 'down',
     });
     const [npcs, setNpcs] = useState<Npc[]>(INITIAL_NPCS);
     const [inventory, setInventory] = useState<InventoryItem[]>([]);
@@ -23,6 +25,8 @@ const App: React.FC = () => {
     const [currentRoom, setCurrentRoom] = useState<RoomId>('INTRODUCTION');
     const [unlockedRooms, setUnlockedRooms] = useState<RoomId[]>(['INTRODUCTION']);
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    const [isModalAnimating, setIsModalAnimating] = useState(false);
+    const kickTimerRef = useRef<number | null>(null);
 
     useEffect(() => {
         if (!audioRef.current) {
@@ -198,6 +202,10 @@ const App: React.FC = () => {
     const handleInteraction = useCallback(() => {
         if (gameState !== GameState.PLAYING || !nearbyInteractiveObject) return;
         
+        // Check if we should use kick animation (Rooms 3 and 4)
+        const shouldKick = (currentRoom === 'APPLICATIONS' || currentRoom === 'LIMITATIONS') && 
+                          (nearbyInteractiveObject.type === 'display' || nearbyInteractiveObject.type === 'station');
+        
         if (nearbyInteractiveObject.type === 'door') {
             if (unlockedRooms.includes(nearbyInteractiveObject.to)) {
                 const targetDoorPosition = DOOR_POSITIONS[nearbyInteractiveObject.to][nearbyInteractiveObject.targetDoorId];
@@ -237,14 +245,47 @@ const App: React.FC = () => {
 
             const hasRequiredItems = step.requiredItems.every(reqItem => inventory.includes(reqItem));
             if (hasRequiredItems) {
-                setInteractingWith(nearbyInteractiveObject);
-                setGameState(GameState.INTERACTING);
+                if (shouldKick) {
+                    // Calculate kick direction based on player and object positions
+                    const dx = nearbyInteractiveObject.position.x - player.position.x;
+                    const dy = nearbyInteractiveObject.position.y - player.position.y;
+                    let kickDir: 'up' | 'down' | 'left' | 'right' = 'down';
+                    
+                    if (Math.abs(dx) > Math.abs(dy)) {
+                        kickDir = dx > 0 ? 'right' : 'left';
+                    } else {
+                        kickDir = dy > 0 ? 'down' : 'up';
+                    }
+                    
+                    // Start kick animation
+                    setPlayer(prev => ({ ...prev, isKicking: true, kickDirection: kickDir }));
+                    
+                    // Clear any existing timer
+                    if (kickTimerRef.current) {
+                        clearTimeout(kickTimerRef.current);
+                    }
+                    
+                    // After kick animation completes (400ms), open modal with animation
+                    kickTimerRef.current = window.setTimeout(() => {
+                        setPlayer(prev => ({ ...prev, isKicking: false }));
+                        setInteractingWith(nearbyInteractiveObject);
+                        setIsModalAnimating(true);
+                        setGameState(GameState.INTERACTING);
+                        
+                        // Reset modal animation flag after animation completes
+                        setTimeout(() => setIsModalAnimating(false), 500);
+                    }, 400);
+                } else {
+                    // No kick animation for other rooms
+                    setInteractingWith(nearbyInteractiveObject);
+                    setGameState(GameState.INTERACTING);
+                }
             } else {
                 const missingItems = step.requiredItems.filter(item => !inventory.includes(item));
                 showNotification(`Missing required items: ${missingItems.join(', ')}`);
             }
         }
-    }, [gameState, nearbyInteractiveObject, currentStep, inventory, showNotification, unlockedRooms, currentRoom, roomData]);
+    }, [gameState, nearbyInteractiveObject, currentStep, inventory, showNotification, unlockedRooms, currentRoom, roomData, player.position]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -310,15 +351,17 @@ const App: React.FC = () => {
 
     const handleRestart = () => {
         if (notificationTimer.current) clearTimeout(notificationTimer.current);
+        if (kickTimerRef.current) clearTimeout(kickTimerRef.current);
         setNotification(null);
         setGameState(GameState.CHARACTER_CREATION);
-        setPlayer(p => ({...p, character: PREDEFINED_CHARACTERS[0], position: { x: 400, y: 540 }}));
+        setPlayer(p => ({...p, character: PREDEFINED_CHARACTERS[0], position: { x: 400, y: 540 }, isKicking: false, kickDirection: 'down'}));
         setNpcs(INITIAL_NPCS);
         setInventory([]);
         setCurrentStepIndex(0);
         setInteractingWith(null);
         setCurrentRoom('INTRODUCTION');
         setUnlockedRooms(['INTRODUCTION']);
+        setIsModalAnimating(false);
     }
 
     return (
@@ -363,6 +406,7 @@ const App: React.FC = () => {
                                 setGameState(GameState.PLAYING);
                             }}
                             onComplete={handleTaskComplete}
+                            isAnimating={isModalAnimating}
                         />
                     )}
                 </div>

@@ -414,6 +414,42 @@ const GameWorld: React.FC<GameWorldProps> = ({ player, roomData, npcs, nearbyInt
                     <div className={`absolute w-full h-1/2 ${player.character.hairColor} top-0`}></div>
                     {player.character.accessory === 'glasses' && <div className="absolute w-full h-1 bg-black top-1/2 -translate-y-1/2"></div>}
                 </div>
+                
+                {/* Kick Animation Leg */}
+                {player.isKicking && (
+                    <div 
+                        className={`absolute w-2 h-4 bg-gray-700 rounded-sm transition-all duration-300 animate-kick-leg`}
+                        style={{
+                            bottom: player.kickDirection === 'down' ? '-8px' : player.kickDirection === 'up' ? '20px' : '8px',
+                            left: player.kickDirection === 'left' ? '-8px' : player.kickDirection === 'right' ? '28px' : '15px',
+                            transform: player.kickDirection === 'down' ? 'rotate(20deg)' : 
+                                      player.kickDirection === 'up' ? 'rotate(-20deg)' : 
+                                      player.kickDirection === 'left' ? 'rotate(-70deg)' : 
+                                      'rotate(70deg)',
+                            transformOrigin: 'top center'
+                        }}
+                    >
+                        {/* Foot */}
+                        <div className="absolute bottom-0 w-3 h-2 bg-gray-900 rounded-sm" style={{
+                            left: player.kickDirection === 'left' || player.kickDirection === 'right' ? '-0.5px' : '-2px'
+                        }}></div>
+                    </div>
+                )}
+                
+                {/* Kick Impact Effect */}
+                {player.isKicking && (
+                    <div 
+                        className="absolute animate-ping"
+                        style={{
+                            width: '12px',
+                            height: '12px',
+                            borderRadius: '50%',
+                            backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                            top: player.kickDirection === 'down' ? '32px' : player.kickDirection === 'up' ? '-8px' : '16px',
+                            left: player.kickDirection === 'left' ? '-8px' : player.kickDirection === 'right' ? '32px' : '16px',
+                        }}
+                    ></div>
+                )}
             </div>
 
             {nearbyInteractiveId && (

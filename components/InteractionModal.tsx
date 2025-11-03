@@ -7,9 +7,10 @@ interface InteractionModalProps {
     step: Step;
     onClose: () => void;
     onComplete: () => void;
+    isAnimating?: boolean;
 }
 
-const InteractionModal: React.FC<InteractionModalProps> = ({ interactiveObject, step, onClose, onComplete }) => {
+const InteractionModal: React.FC<InteractionModalProps> = ({ interactiveObject, step, onClose, onComplete, isAnimating = false }) => {
     const [isMinigameComplete, setIsMinigameComplete] = useState(false);
 
     const handleMinigameComplete = () => {
@@ -44,7 +45,9 @@ const InteractionModal: React.FC<InteractionModalProps> = ({ interactiveObject, 
             className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[3000] p-4"
             onClick={handleBackdropClick}
         >
-            <div className="bg-gray-800 text-white rounded-lg shadow-2xl border-2 border-blue-400 w-full max-w-4xl max-h-[90vh] transform transition-all animate-fade-in-up relative flex flex-col">
+            <div className={`bg-gray-800 text-white rounded-lg shadow-2xl border-2 border-blue-400 w-full max-w-4xl max-h-[90vh] transform transition-all relative flex flex-col ${
+                isAnimating ? 'animate-modal-slide-up' : 'animate-fade-in-up'
+            }`}>
                 {/* Fixed Header with Close Button */}
                 <div className="p-4 border-b border-gray-600 flex justify-between items-center flex-shrink-0">
                     <h2 className="text-2xl font-bold text-yellow-300">{interactiveObject.name}</h2>
