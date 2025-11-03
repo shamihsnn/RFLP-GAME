@@ -26,14 +26,14 @@ const IntroAnimation: React.FC<IntroAnimationProps> = ({ onComplete, character }
     const timersRef = useRef<number[]>([]);
     const audioTimersRef = useRef<number[]>([]);
 
-    // Initialize audio elements on mount. Files are placeholders; add your MP3s under public/audio.
+    // Initialize audio elements on mount
     useEffect(() => {
-        ambientRef.current = new Audio('/cricket-ambience-night.mp3   ');
-        murderRef.current = new Audio('/among-us-sound-157106.mp3');
-        screamRef.current = new Audio('/among2.mp3');
-        stingRef.current = new Audio('/dramatic-sting.mp3');
-        sabotageRef.current = new Audio('/among-us-alarme-sabotage-393155.mp3');
-        themeRef.current = new Audio('/cricket-ambience-night.mp3');
+        ambientRef.current = new Audio('/assets/cricket-ambience-night.mp3');
+        murderRef.current = new Audio('/assets/among-us-sound-157106.mp3');
+        screamRef.current = new Audio('/assets/among-us-sound-157106.mp3'); // Using same sound as murder
+        stingRef.current = new Audio('/assets/dramatic-sting-118943.mp3');
+        sabotageRef.current = new Audio('/assets/among-us-alarme-sabotage-393155.mp3');
+        themeRef.current = new Audio('/assets/cricket-ambience-night.mp3');
 
         // Try to play ambient (may be blocked until user gesture) — non-blocking
         if (ambientRef.current) {

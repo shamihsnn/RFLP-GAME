@@ -3,18 +3,21 @@
 ## Audio Issues on Vercel - Fixed! ✅
 
 ### The Problem
-Background music wasn't playing on Vercel deployment due to:
-1. Incorrect audio file path
+Audio wasn't playing on Vercel deployment due to:
+1. Incorrect audio file paths in multiple components
 2. Browser autoplay restrictions
 
 ### The Solution
-✅ **Fixed audio path**: Changed from `/background-music.mp3` to `/assets/background-music.mp3`
+✅ **Fixed all audio paths**: Changed to `/assets/` directory
+✅ **App.tsx**: `/background-music.mp3` → `/assets/background-music.mp3`
+✅ **IntroAnimation.tsx**: Fixed all 5 sound effect paths
 ✅ **Added autoplay handling**: Gracefully handles browser autoplay restrictions
 ✅ **Click-to-play fallback**: Audio starts on any user click if autoplay is blocked
 ✅ **Added vercel.json**: Ensures proper static file serving
 
 ### Files Changed
-- `App.tsx` - Fixed audio path and improved error handling
+- `App.tsx` - Fixed background music path and improved error handling
+- `IntroAnimation.tsx` - Fixed all intro animation sound paths
 - `vercel.json` - Added for proper asset caching
 
 ### Deployment Steps
@@ -58,8 +61,23 @@ Modern browsers (Chrome, Firefox, Safari) block autoplay until user interaction.
 ```
 public/
   assets/
-    background-music.mp3  ← Audio file here
-    steps.jpg
+    background-music.mp3              ← Background music (7.3MB)
+    cricket-ambience-night.mp3        ← Ambient sound (501KB)
+    among-us-sound-157106.mp3         ← Murder/scream sound (97KB)
+    among-us-alarme-sabotage-393155.mp3 ← Sabotage sound (251KB)
+    dramatic-sting-118943.mp3         ← Dramatic sting (51KB)
+    steps.jpg                         ← Protocol image
 ```
 
 This structure ensures Vite/Vercel serves files correctly from `/assets/` path.
+
+### Audio Files Used
+**App.tsx (Background Music):**
+- `background-music.mp3` - Plays during gameplay
+
+**IntroAnimation.tsx (Intro Scene Sounds):**
+- `cricket-ambience-night.mp3` - Ambient night sounds
+- `among-us-sound-157106.mp3` - Murder scene and scream
+- `dramatic-sting-118943.mp3` - Dramatic sting on victim fall
+- `among-us-alarme-sabotage-393155.mp3` - Struggle/attack sound
+- `cricket-ambience-night.mp3` - Lab scene theme
