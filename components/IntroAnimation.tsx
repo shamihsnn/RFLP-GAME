@@ -16,21 +16,22 @@ const IntroAnimation: React.FC<IntroAnimationProps> = ({ onComplete, character }
     const [currentScene, setCurrentScene] = useState(0);
     const [fadeOut, setFadeOut] = useState(false);
 
-    // Audio refs - placeholders for the user to drop MP3 files into `/public/audio`
+    // Audio refs - use files placed in `/public/assets`
     const ambientRef = useRef<HTMLAudioElement | null>(null);
-    const murderRef = useRef<HTMLAudioElement | null>(null);
     const screamRef = useRef<HTMLAudioElement | null>(null);
+    const ambulanceRef = useRef<HTMLAudioElement | null>(null);
     const stingRef = useRef<HTMLAudioElement | null>(null);
     const sabotageRef = useRef<HTMLAudioElement | null>(null);
     const themeRef = useRef<HTMLAudioElement | null>(null);
+    const screamEndedHandlerRef = useRef<(() => void) | null>(null);
     const timersRef = useRef<number[]>([]);
     const audioTimersRef = useRef<number[]>([]);
 
     // Initialize audio elements on mount
     useEffect(() => {
         ambientRef.current = new Audio('/assets/cricket-ambience-night.mp3');
-        murderRef.current = new Audio('/assets/among-us-sound-157106.mp3');
-        screamRef.current = new Audio('/assets/among-us-sound-157106.mp3'); // Using same sound as murder
+        screamRef.current = new Audio('/assets/scream-loud.mp3');
+        ambulanceRef.current = new Audio('/assets/ambulance-sound.mp3');
         stingRef.current = new Audio('/assets/dramatic-sting-118943.mp3');
         sabotageRef.current = new Audio('/assets/among-us-alarme-sabotage-393155.mp3');
         themeRef.current = new Audio('/assets/cricket-ambience-night.mp3');
@@ -38,8 +39,8 @@ const IntroAnimation: React.FC<IntroAnimationProps> = ({ onComplete, character }
         // Add error handlers for debugging
         const audioElements = [
             { ref: ambientRef, name: 'ambient' },
-            { ref: murderRef, name: 'murder' },
             { ref: screamRef, name: 'scream' },
+            { ref: ambulanceRef, name: 'ambulance' },
             { ref: stingRef, name: 'sting' },
             { ref: sabotageRef, name: 'sabotage' },
             { ref: themeRef, name: 'theme' }
@@ -69,68 +70,62 @@ const IntroAnimation: React.FC<IntroAnimationProps> = ({ onComplete, character }
             timersRef.current.forEach((t) => clearTimeout(t));
             timersRef.current.length = 0;
             try { ambientRef.current?.pause(); } catch {}
-            try { murderRef.current?.pause(); murderRef.current && (murderRef.current.currentTime = 0); } catch {}
-            try { screamRef.current?.pause(); screamRef.current && (screamRef.current.currentTime = 0); } catch {}
+            try {
+                if (screamRef.current) {
+                    if (screamEndedHandlerRef.current) {
+                        try { screamRef.current.removeEventListener('ended', screamEndedHandlerRef.current); } catch {}
+                        screamEndedHandlerRef.current = null;
+                    }
+                    screamRef.current.pause();
+                    screamRef.current.currentTime = 0;
+                }
+            } catch {}
+            try { ambulanceRef.current?.pause(); ambulanceRef.current && (ambulanceRef.current.currentTime = 0); } catch {}
             try { stingRef.current?.pause(); stingRef.current && (stingRef.current.currentTime = 0); } catch {}
             try { sabotageRef.current?.pause(); sabotageRef.current && (sabotageRef.current.currentTime = 0); } catch {}
             try { themeRef.current?.pause(); themeRef.current && (themeRef.current.currentTime = 0); } catch {}
+            // Stop ambulance only on complete unmount
+            try { if (ambulanceRef.current) { ambulanceRef.current.loop = false; ambulanceRef.current.pause(); ambulanceRef.current.currentTime = 0; } } catch {}
             ambientRef.current = null;
-            murderRef.current = null;
             screamRef.current = null;
+            ambulanceRef.current = null;
             stingRef.current = null;
             sabotageRef.current = null;
             themeRef.current = null;
         };
     }, []);
 
-    // Play murder, scream, and dramatic sting when scene 0 starts — use a dedicated audio timer ref
+    // Manage scene-specific audio. We trigger the scream + ambulance when the victim falls (crimePhase -> 3).
     useEffect(() => {
-        // clear audio timers only
+        // ensure any pending audio timers are cleared
         audioTimersRef.current.forEach((t) => clearTimeout(t));
         audioTimersRef.current.length = 0;
 
-        if (currentScene === 0) {
-            const t1 = window.setTimeout(() => {
-                try {
-                    if (murderRef.current) { 
-                        // play this cue throughout the crime scene
-                        murderRef.current.volume = 0.5; 
-                        murderRef.current.loop = true;
-                        murderRef.current.play().catch(() => {}); 
+        // When leaving scene 0, stop scream only (keep ambulance playing)
+        if (currentScene !== 0) {
+            try {
+                if (screamRef.current) {
+                    if (screamEndedHandlerRef.current) {
+                        try { screamRef.current.removeEventListener('ended', screamEndedHandlerRef.current); } catch {}
+                        screamEndedHandlerRef.current = null;
                     }
-                } catch {}
-            }, 800);
+                    screamRef.current.pause();
+                    screamRef.current.currentTime = 0;
+                }
+            } catch {}
+        }
 
-            const t2 = window.setTimeout(() => {
-                try {
-                    if (screamRef.current) { screamRef.current.volume = 0.35; screamRef.current.play().catch(() => {}); }
-                } catch {}
-            }, 1300);
-
-            // Dramatic sting timed to the victim fall (will play once)
-            const tSting = window.setTimeout(() => {
-                try {
-                    if (stingRef.current) { stingRef.current.volume = 0.6; stingRef.current.play().catch(() => {}); }
-                } catch {}
-            }, 4200);
-
-            audioTimersRef.current.push(t1 as unknown as number, t2 as unknown as number, tSting as unknown as number);
+        // Theme handling for later scenes
+        if (currentScene === 3) { // Lab Scene
+            try {
+                if (themeRef.current) {
+                    themeRef.current.volume = 0.4;
+                    themeRef.current.loop = true;
+                    themeRef.current.play().catch(() => {});
+                }
+            } catch {}
         } else {
-            try { if (murderRef.current) { murderRef.current.loop = false; murderRef.current.pause(); murderRef.current.currentTime = 0; } } catch {}
-            try { if (screamRef.current) { screamRef.current.pause(); screamRef.current.currentTime = 0; } } catch {}
-            try { if (stingRef.current) { stingRef.current.pause(); stingRef.current.currentTime = 0; } } catch {}
-            try { if (sabotageRef.current) { sabotageRef.current.pause(); sabotageRef.current.currentTime = 0; } } catch {}
-            if (currentScene === 3) { // Lab Scene
-                try {
-                    if (themeRef.current) {
-                        themeRef.current.volume = 0.4;
-                        themeRef.current.loop = true;
-                        themeRef.current.play().catch(() => {});
-                    }
-                } catch {}
-            } else {
-                try { if (themeRef.current) { themeRef.current.pause(); themeRef.current.currentTime = 0; } } catch {}
-            }
+            try { if (themeRef.current) { themeRef.current.pause(); themeRef.current.currentTime = 0; } } catch {}
         }
 
         return () => {
@@ -169,7 +164,56 @@ const IntroAnimation: React.FC<IntroAnimationProps> = ({ onComplete, character }
                 }
             } catch {}
         }, 3600);
-        const tFall = window.setTimeout(() => setCrimePhase(3), 4200);
+        const tFall = window.setTimeout(() => {
+            setCrimePhase(3);
+
+            // Play scream exactly when victim falls (non-looping, brief)
+            try {
+                if (screamRef.current) {
+                    // remove any previous ended handler
+                    if (screamEndedHandlerRef.current && screamRef.current) {
+                        try { screamRef.current.removeEventListener('ended', screamEndedHandlerRef.current); } catch {}
+                        screamEndedHandlerRef.current = null;
+                    }
+
+                    screamRef.current.volume = 0.6;
+                    screamRef.current.loop = false;
+                    screamRef.current.currentTime = 0;
+                    console.log('Playing scream, will schedule ambulance after 2s...');
+                    screamRef.current.play()
+                        .then(() => {
+                            console.log('Scream started successfully');
+                            const tAmb = window.setTimeout(() => {
+                                console.log('2s elapsed, starting ambulance...');
+                                if (ambulanceRef.current) {
+                                    ambulanceRef.current.volume = 0.45;
+                                    ambulanceRef.current.loop = true;
+                                    ambulanceRef.current.currentTime = 0;
+                                    ambulanceRef.current.play()
+                                        .then(() => console.log('Ambulance started successfully'))
+                                        .catch(err => console.error('Ambulance play failed:', err));
+                                }
+                            }, 4500);
+                            audioTimersRef.current.push(tAmb as unknown as number);
+                        })
+                        .catch(err => {
+                            console.error('Scream play failed:', err);
+                            // If scream fails, still try ambulance after delay
+                            const tAmb = window.setTimeout(() => {
+                                if (ambulanceRef.current) {
+                                    ambulanceRef.current.volume = 0.45;
+                                    ambulanceRef.current.loop = true;
+                                    ambulanceRef.current.currentTime = 0;
+                                    ambulanceRef.current.play()
+                                        .then(() => console.log('Ambulance started (after scream failure)'))
+                                        .catch(err => console.error('Ambulance play failed:', err));
+                                }
+                            }, 2000);
+                            audioTimersRef.current.push(tAmb as unknown as number);
+                        });
+                }
+            } catch {}
+        }, 4200);
         const tFlee = window.setTimeout(() => setCrimePhase(4), 5200);
 
         timersRef.current.push(tEmergence as unknown as number, tStruggle as unknown as number, tFall as unknown as number, tFlee as unknown as number);
@@ -549,11 +593,11 @@ const IntroAnimation: React.FC<IntroAnimationProps> = ({ onComplete, character }
                     {/* Title animation */}
                     <div className="absolute top-1/4 left-1/2 -translate-x-1/2 text-center w-full">
                         <h2 className="text-5xl font-bold text-white mb-4 animate-[fadeInUp_1s_ease-out_forwards]">
-                            RFLP ANALYSIS
+                            GAME Objective
                         </h2>
                         <div className="h-1 w-64 bg-gradient-to-r from-transparent via-cyan-400 to-transparent mx-auto mb-6 animate-[expand_1s_ease-out_0.5s_forwards] scale-x-0" />
                         <p className="text-xl text-cyan-300 opacity-0 animate-[fadeIn_1s_ease-in_1s_forwards]">
-                            Restriction Fragment Length Polymorphism
+                           RFLP Restriction Fragment Length Polymorphism
                         </p>
                         <p className="text-lg text-gray-300 mt-4 opacity-0 animate-[fadeIn_1s_ease-in_1.5s_forwards]">
                             Analyzing DNA evidence to identify the perpetrator

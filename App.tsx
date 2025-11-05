@@ -25,6 +25,7 @@ const App: React.FC = () => {
     const [currentRoom, setCurrentRoom] = useState<RoomId>('INTRODUCTION');
     const [unlockedRooms, setUnlockedRooms] = useState<RoomId[]>(['INTRODUCTION']);
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    const doorAudioRef = useRef<HTMLAudioElement | null>(null);
     const [isModalAnimating, setIsModalAnimating] = useState(false);
     const kickTimerRef = useRef<number | null>(null);
 
@@ -33,6 +34,12 @@ const App: React.FC = () => {
             audioRef.current = new Audio('/assets/background-music.mp3');
             audioRef.current.loop = true;
             audioRef.current.volume = 0.3; // Set volume to 30%
+            // Door sound (plays once when rooms are accessed)
+            doorAudioRef.current = new Audio('/assets/door-sound.mp3');
+            if (doorAudioRef.current) {
+                doorAudioRef.current.loop = false;
+                doorAudioRef.current.volume = 0.95;
+            }
         }
 
         const shouldPlay = gameState === GameState.PLAYING || gameState === GameState.INTERACTING;
@@ -217,6 +224,8 @@ const App: React.FC = () => {
             if (unlockedRooms.includes(nearbyInteractiveObject.to)) {
                 const targetDoorPosition = DOOR_POSITIONS[nearbyInteractiveObject.to][nearbyInteractiveObject.targetDoorId];
                 if (targetDoorPosition) {
+                    // play door opening sound
+                    try { if (doorAudioRef.current) { doorAudioRef.current.currentTime = 0; doorAudioRef.current.play().catch(() => {}); } } catch {}
                     setPlayer(p => ({ ...p, position: { x: targetDoorPosition.x, y: targetDoorPosition.y } }));
                     setCurrentRoom(nearbyInteractiveObject.to);
                 } else {

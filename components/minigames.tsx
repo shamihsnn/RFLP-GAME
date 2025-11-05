@@ -18,18 +18,201 @@ const MiniGameButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = 
 export const EvidenceCollection: React.FC<MiniGameProps> = ({ onComplete, onClose }) => {
     const [currentSlide, setCurrentSlide] = useState<number | null>(null);
 
+    // Slide 1: DNA Helix Animation Component
+    const Slide1Animation = () => (
+        <div className="relative w-full h-48 md:h-56 bg-gradient-to-b from-gray-900 to-blue-900 rounded-xl overflow-hidden border-2 border-blue-400 mb-4">
+            {/* Animated DNA Helix */}
+            <div className="absolute inset-0 flex items-center justify-center">
+                <svg className="w-48 md:w-64 h-full" viewBox="0 0 100 300" xmlns="http://www.w3.org/2000/svg">
+                    {/* Left strand - animated */}
+                    <path 
+                        d="M 30 0 Q 10 37.5, 30 75 Q 50 112.5, 30 150 Q 10 187.5, 30 225 Q 50 262.5, 30 300" 
+                        stroke="#3B82F6" 
+                        strokeWidth="4" 
+                        fill="none" 
+                        className="animate-pulse"
+                        style={{ animationDuration: '2s' }}
+                    />
+                    {/* Right strand - animated */}
+                    <path 
+                        d="M 70 0 Q 90 37.5, 70 75 Q 50 112.5, 70 150 Q 90 187.5, 70 225 Q 50 262.5, 70 300" 
+                        stroke="#60A5FA" 
+                        strokeWidth="4" 
+                        fill="none" 
+                        className="animate-pulse"
+                        style={{ animationDuration: '2s', animationDelay: '0.3s' }}
+                    />
+                    {/* Base pairs - staggered animation */}
+                    {[0, 37.5, 75, 112.5, 150, 187.5, 225, 262.5].map((y, i) => (
+                        <g key={i} style={{ animation: 'pulse 2s ease-in-out infinite', animationDelay: `${i * 0.15}s` }}>
+                            <line 
+                                x1="30" 
+                                y1={y} 
+                                x2="70" 
+                                y2={y} 
+                                stroke={i % 2 === 0 ? "#10B981" : "#F59E0B"} 
+                                strokeWidth="3"
+                                opacity="0.8"
+                            />
+                            <circle cx="30" cy={y} r="4" fill="#3B82F6" />
+                            <circle cx="70" cy={y} r="4" fill="#60A5FA" />
+                        </g>
+                    ))}
+                </svg>
+                {/* Glowing effect */}
+                <div className="absolute inset-0 bg-gradient-to-t from-blue-500/10 via-transparent to-blue-500/10 animate-pulse"></div>
+            </div>
+            {/* Floating info bubbles */}
+            <div className="absolute top-4 left-4 bg-blue-900/80 backdrop-blur-sm px-4 py-2 rounded-full text-sm text-blue-200 animate-bounce" style={{ animationDuration: '3s' }}>
+                🧬 DNA Double Helix
+            </div>
+            <div className="absolute bottom-4 right-4 bg-indigo-900/80 backdrop-blur-sm px-4 py-2 rounded-full text-sm text-indigo-200 animate-bounce" style={{ animationDuration: '3s', animationDelay: '0.5s' }}>
+                💡 Genetic Blueprint
+            </div>
+        </div>
+    );
+
+    // Slide 2: Scissors Cutting DNA Animation
+    const Slide2Animation = () => {
+        const [cutPhase, setCutPhase] = useState(0);
+        
+        useEffect(() => {
+            const timer = setInterval(() => {
+                setCutPhase(prev => (prev + 1) % 3);
+            }, 2000);
+            return () => clearInterval(timer);
+        }, []);
+
+        return (
+            <div className="relative w-full h-48 md:h-56 bg-gradient-to-b from-gray-900 to-purple-900 rounded-xl overflow-hidden border-2 border-purple-400 mb-4">
+                {/* DNA strand */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full px-8">
+                    {cutPhase < 2 ? (
+                        <div className="h-2 bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 rounded-full shadow-lg shadow-blue-500/50"></div>
+                    ) : (
+                        <div className="flex justify-around items-center gap-4">
+                            <div className="h-2 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full flex-1 shadow-lg shadow-blue-500/50 animate-pulse"></div>
+                            <div className="h-2 bg-gradient-to-r from-cyan-400 to-blue-400 rounded-full flex-1 shadow-lg shadow-blue-500/50 animate-pulse"></div>
+                        </div>
+                    )}
+                </div>
+                
+                {/* Animated scissors */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-500" style={{ transform: cutPhase === 1 ? 'translate(-50%, -50%) scale(1.2)' : 'translate(-50%, -50%) scale(1)' }}>
+                    <svg className="w-20 h-20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 6L18 18M6 18L18 6" stroke="#EF4444" strokeWidth="2.5" strokeLinecap="round"/>
+                        <circle cx="6" cy="6" r="3.5" fill="#DC2626" stroke="#991B1B" strokeWidth="1"/>
+                        <circle cx="6" cy="18" r="3.5" fill="#DC2626" stroke="#991B1B" strokeWidth="1"/>
+                        <path d="M12 12L18 6" stroke="#7C2D12" strokeWidth="2.5"/>
+                        <path d="M12 12L18 18" stroke="#7C2D12" strokeWidth="2.5"/>
+                    </svg>
+                </div>
+                
+                {/* Cut flash effect */}
+                {cutPhase === 1 && (
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-16 bg-gradient-to-b from-transparent via-red-500 to-transparent animate-pulse"></div>
+                )}
+                
+                {/* Info labels */}
+                <div className="absolute top-4 left-4 bg-purple-900/80 backdrop-blur-sm px-4 py-2 rounded-full text-sm text-purple-200">
+                    ✂️ Restriction Enzyme
+                </div>
+                <div className="absolute bottom-4 right-4 bg-pink-900/80 backdrop-blur-sm px-4 py-2 rounded-full text-sm text-pink-200">
+                    {cutPhase < 2 ? '⏳ Cutting...' : '✅ Fragments Created'}
+                </div>
+                
+                {/* Recognition sequence indicator */}
+                <div className="absolute bottom-12 left-1/2 -translate-x-1/2 bg-yellow-900/80 backdrop-blur-sm px-3 py-1 rounded text-xs text-yellow-200 font-mono">
+                    GAATTC
+                </div>
+            </div>
+        );
+    };
+
+    // Slide 3: DNA Fingerprint/Gel Pattern Animation
+    const Slide3Animation = () => {
+        const [showBands, setShowBands] = useState(false);
+        
+        useEffect(() => {
+            const timer = setTimeout(() => setShowBands(true), 500);
+            return () => clearTimeout(timer);
+        }, []);
+
+        return (
+            <div className="relative w-full h-48 md:h-56 bg-gradient-to-b from-gray-900 to-green-900 rounded-xl overflow-hidden border-2 border-green-400 mb-4">
+                {/* Gel background */}
+                <div className="absolute inset-4 bg-gray-800/50 rounded border-2 border-gray-600">
+                    {/* Electric field indicators */}
+                    <div className="absolute top-2 left-2 text-red-400 font-bold text-sm">− Negative</div>
+                    <div className="absolute bottom-2 left-2 text-blue-400 font-bold text-sm">+ Positive</div>
+                    
+                    {/* DNA Fingerprint lanes */}
+                    <div className="absolute inset-0 flex justify-around items-center px-8 py-12">
+                        {/* Person A */}
+                        <div className="flex flex-col items-center gap-2">
+                            <div className="text-xs text-gray-300 mb-1">Person A</div>
+                            <div className="relative w-8 h-32 md:h-40 bg-gray-700/50 rounded">
+                                {showBands && (
+                                    <>
+                                        <div className="absolute w-full h-2 bg-gradient-to-r from-pink-400 via-pink-300 to-pink-400 rounded-full shadow-lg shadow-pink-500/50 transition-all duration-1000" style={{ top: '30%', opacity: showBands ? 1 : 0 }}></div>
+                                        <div className="absolute w-full h-2 bg-gradient-to-r from-pink-400 via-pink-300 to-pink-400 rounded-full shadow-lg shadow-pink-500/50 transition-all duration-1000 delay-300" style={{ top: '60%', opacity: showBands ? 1 : 0 }}></div>
+                                    </>
+                                )}
+                            </div>
+                            <div className="text-xs text-green-300">5 VNTRs</div>
+                        </div>
+                        
+                        {/* Person B */}
+                        <div className="flex flex-col items-center gap-2">
+                            <div className="text-xs text-gray-300 mb-1">Person B</div>
+                            <div className="relative w-8 h-32 md:h-40 bg-gray-700/50 rounded">
+                                {showBands && (
+                                    <>
+                                        <div className="absolute w-full h-2 bg-gradient-to-r from-cyan-400 via-cyan-300 to-cyan-400 rounded-full shadow-lg shadow-cyan-500/50 transition-all duration-1000 delay-500" style={{ top: '20%', opacity: showBands ? 1 : 0 }}></div>
+                                        <div className="absolute w-full h-2 bg-gradient-to-r from-cyan-400 via-cyan-300 to-cyan-400 rounded-full shadow-lg shadow-cyan-500/50 transition-all duration-1000 delay-700" style={{ top: '70%', opacity: showBands ? 1 : 0 }}></div>
+                                    </>
+                                )}
+                            </div>
+                            <div className="text-xs text-green-300">10 VNTRs</div>
+                        </div>
+                        
+                        {/* Probe indicator */}
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 bg-yellow-900/80 backdrop-blur-sm px-3 py-2 rounded-lg text-xs text-yellow-200">
+                            <div className="flex items-center gap-2">
+                                <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+                                <span>☢ Radioactive Probe</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {/* Info labels */}
+                <div className="absolute top-4 right-4 bg-green-900/80 backdrop-blur-sm px-4 py-2 rounded-full text-sm text-green-200 animate-pulse">
+                    🧬 Unique DNA Fingerprints
+                </div>
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-blue-900/80 backdrop-blur-sm px-4 py-2 rounded-full text-sm text-blue-200">
+                    📊 Different Band Patterns = Different Individuals
+                </div>
+            </div>
+        );
+    };
+
     const slides = [
         {
             title: 'Introduction to RFLP',
+            animation: <Slide1Animation />,
             content: [
                 'RFLP = Restriction Fragment Length Polymorphism',
                 'Molecular technique for DNA analysis & identification',
                 'First DNA fingerprinting method (1980s)',
-                'Applications: Forensics, paternity testing, disease diagnosis, genome mapping'
+                'Developed by Alec Jeffreys in 1984',
+                
+               
             ]
         },
         {
             title: 'Principle - Restriction Enzymes & Polymorphism',
+            animation: <Slide2Animation />,
             content: [
                 'Restriction Enzymes:',
                 '• "Molecular scissors"',
@@ -48,6 +231,7 @@ export const EvidenceCollection: React.FC<MiniGameProps> = ({ onComplete, onClos
         },
         {
             title: 'How RFLP Creates DNA Fingerprints',
+            animation: <Slide3Animation />,
             content: [
                 'Example:',
                 'Person A: [Cut]--5 VNTR repeats--[Cut] = 2kb fragment',
@@ -77,7 +261,7 @@ export const EvidenceCollection: React.FC<MiniGameProps> = ({ onComplete, onClos
                     <button
                         key={index}
                         onClick={() => setCurrentSlide(index)}
-                        className="p-2 bg-blue-600 hover:bg-blue-700 rounded text-sm transition-all"
+                        className="p-2 bg-blue-600 hover:bg-blue-700 rounded text-sm transition-all transform hover:scale-105"
                     >
                         {`Slide ${index + 1}: ${slide.title}`}
                     </button>
@@ -85,10 +269,10 @@ export const EvidenceCollection: React.FC<MiniGameProps> = ({ onComplete, onClos
             </div>
 
             {currentSlide !== null && (
-                <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[4000] backdrop-blur-sm">
-                    <div className="bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900 p-8 rounded-2xl max-w-3xl w-full border-4 border-blue-400 shadow-2xl shadow-blue-500/50 transform transition-all animate-slide-in">
-                        <div className="flex items-center gap-3 mb-6 pb-4 border-b-2 border-blue-400">
-                            <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center shadow-lg">
+                <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-3 md:p-4 z-[4000] backdrop-blur-sm">
+                    <div className="bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900 p-4 md:p-6 lg:p-8 rounded-2xl w-[95vw] md:w-[90vw] lg:w-auto max-w-6xl max-h-[92vh] overflow-y-auto scroll-smooth border-4 border-blue-400 shadow-2xl shadow-blue-500/50 transform transition-all" style={{ animation: 'slideIn 0.3s ease-out' }}>
+                        <div className="flex items-center gap-3 mb-4 md:mb-6 pb-3 md:pb-4 border-b-2 border-blue-400">
+                            <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center shadow-lg animate-pulse">
                                 <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
                                 </svg>
@@ -98,25 +282,40 @@ export const EvidenceCollection: React.FC<MiniGameProps> = ({ onComplete, onClos
                                 Slide {currentSlide + 1}/3
                             </span>
                         </div>
-                        <div className="space-y-3 text-gray-100 bg-gray-800 bg-opacity-40 p-6 rounded-xl border border-blue-500 border-opacity-30 max-h-[60vh] overflow-y-auto">
+                        
+                        {/* Animation Section */}
+                        {slides[currentSlide].animation}
+                        
+                        {/* Content Section with sequential reveal */}
+                        <div className="space-y-2 md:space-y-3 text-gray-100 bg-gray-800 bg-opacity-40 p-4 md:p-6 rounded-xl border border-blue-500 border-opacity-30 max-h-[30vh] overflow-y-auto scroll-smooth">
                             {slides[currentSlide].content.map((line, i) => (
-                                <p key={i} className={`whitespace-pre-wrap leading-relaxed ${line.startsWith('•') || line.startsWith('1.') || line.startsWith('2.') ? 'ml-4 text-blue-100' : line === '' ? 'h-2' : 'text-gray-200 font-medium'}`}>
+                                <p 
+                                    key={i} 
+                                    className={`whitespace-pre-wrap leading-relaxed transition-all duration-500 ${line.startsWith('•') || line.startsWith('1.') || line.startsWith('2.') ? 'ml-4 text-blue-100' : line === '' ? 'h-2' : 'text-gray-200 font-medium'}`}
+                                    style={{ 
+                                        animation: 'fadeInUp 0.5s ease-out forwards',
+                                        animationDelay: `${i * 0.1}s`,
+                                        opacity: 0
+                                    }}
+                                >
                                     {line}
                                 </p>
                             ))}
                         </div>
-                        <div className="flex justify-between items-center mt-6">
+                        
+                        <div className="flex justify-between items-center mt-4 md:mt-6 pt-4 border-t border-blue-500/30">
                             <div className="flex gap-2">
                                 {slides.map((_, idx) => (
-                                    <div 
-                                        key={idx} 
-                                        className={`h-2 rounded-full transition-all ${idx === currentSlide ? 'w-8 bg-blue-400' : 'w-2 bg-gray-600'}`}
+                                    <button
+                                        key={idx}
+                                        onClick={() => setCurrentSlide(idx)}
+                                        className={`h-2 rounded-full transition-all cursor-pointer hover:bg-blue-300 ${idx === currentSlide ? 'w-8 bg-blue-400' : 'w-2 bg-gray-600'}`}
                                     />
                                 ))}
                             </div>
                             <button
                                 onClick={() => setCurrentSlide(null)}
-                                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-lg transition-all font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+                                className="px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-lg transition-all font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 text-sm md:text-base"
                             >
                                 Close
                             </button>
@@ -131,6 +330,30 @@ export const EvidenceCollection: React.FC<MiniGameProps> = ({ onComplete, onClos
             >
                 Collect Blood Sample
             </button>
+            
+            <style jsx>{`
+                @keyframes slideIn {
+                    from {
+                        opacity: 0;
+                        transform: translateY(-20px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+                
+                @keyframes fadeInUp {
+                    from {
+                        opacity: 0;
+                        transform: translateY(10px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+            `}</style>
         </div>
     );
 };
@@ -791,8 +1014,7 @@ export const StepsImageDisplay: React.FC<MiniGameProps & {src?: string}> = ({ on
                 { icon: '🎯', title: 'Limited Detection', text: 'Detects polymorphisms only at restriction sites', color: 'from-orange-500 to-amber-500' },
                 { icon: '📉', title: 'Low Sensitivity', text: 'Cannot detect very small mutations effectively', color: 'from-red-500 to-orange-500' },
                 { icon: '🔬', title: 'Limited Loci', text: 'Analyzes limited number of loci per experiment', color: 'from-amber-500 to-yellow-500' },
-                { icon: '☢️', title: 'Radioactive Probes', text: 'Requires radioactive or labeled probes for detection', color: 'from-orange-500 to-red-500' },
-                { icon: '🧬', title: 'Variable Polymorphism', text: 'May have low polymorphism levels in some species', color: 'from-yellow-500 to-orange-500' }
+                
             ];
 
             const handleClose = () => {
@@ -876,7 +1098,7 @@ export const StepsImageDisplay: React.FC<MiniGameProps & {src?: string}> = ({ on
                 { characteristic: 'Primary Application', rflp: 'Genetic mapping, forensics, diagnosis', pcr: 'Cloning, diagnostics, mutation detection', icon: '🎯' },
                 { characteristic: 'Cost & Complexity', rflp: 'More expensive and technically complex', pcr: 'Cost-effective and simpler', icon: '💰' },
                 { characteristic: 'Automation', rflp: 'Difficult to automate', pcr: 'Easily automated', icon: '🤖' },
-                { characteristic: 'Detection Method', rflp: 'Radioactive/fluorescent probes', pcr: 'Electrophoresis or real-time detection', icon: '🔬' }
+                
             ];
 
             return (
